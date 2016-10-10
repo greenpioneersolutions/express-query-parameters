@@ -1,0 +1,71 @@
+{
+  "name": "express-query-parameters",
+  "version": "0.1.0",
+  "description": "Need a description",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run mocha && npm run standard",
+    "standard": "node node_modules/standard/bin/cmd.js || standard",
+  },
+  "standard": {
+    "globals": [
+      "angular",
+      "toastr",
+      "moment",
+      "self",
+      "_",
+      "describe",
+      "it",
+      "__dirname",
+      "localStorage",
+      "io",
+      "expect",
+      "inject",
+      "before"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/greenpioneersolutions/buildreq.git"
+  },
+  "keywords": [
+    "greenpioneersolutions",
+    "express",
+    "mongoose",
+    "api"
+  ],
+  "contributors": [
+    {
+      "name": "greenpioneersolutions",
+      "email": "green@greenpioneersolutions.com",
+      "web": "https://github.com/greenpioneersolutions"
+    }
+  ],
+  "maintainers": [
+    {
+      "name": "greenpioneersolutions",
+      "web": "https://github.com/greenpioneersolutions?tab=members"
+    }
+  ],
+  "author": "Green Pioneer <green@greenpioneersolutions.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/greenpioneersolutions/buildreq/issues"
+  },
+  "homepage": "https://github.com/greenpioneersolutions/buildreq",
+  "dependencies": {
+    "auto-parse": "^1.0.0",
+    "chalk": "^1.1.1",
+    "lodash": "^4.5.1",
+    "run-auto": "^2.0.0"
+  },
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "mocha": "^2.3.4",
+    "standard": "^5.3.1",
+    "supertest": "^1.1.0"
+  },
+  "engines": {
+    "node": ">= 0.10.0"
+  }
+}
