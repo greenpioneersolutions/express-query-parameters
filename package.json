@@ -1,11 +1,12 @@
 {
   "name": "express-query-parameters",
   "version": "0.1.0",
-  "description": "Need a description",
+  "description": "parse general queries to your express routes. We are adding extra support for sql & mongoose.",
   "main": "index.js",
   "scripts": {
     "test": "npm run mocha && npm run standard",
-    "standard": "node node_modules/standard/bin/cmd.js || standard",
+    "mocha": "node node_modules/.bin/mocha test/mocha.test.js",
+    "standard": "node_modules/.bin/standard"
   },
   "standard": {
     "globals": [
@@ -26,12 +27,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/greenpioneersolutions/buildreq.git"
+    "url": "https://github.com/greenpioneersolutions/express-query-parameters.git"
   },
   "keywords": [
     "greenpioneersolutions",
+    "green pioneer",
     "express",
-    "mongoose",
+    "req.query",
+    "query",
+    "query parameters",
+    "express query parameters",
+    "parameters"
     "api"
   ],
   "contributors": [
@@ -50,14 +56,14 @@
   "author": "Green Pioneer <green@greenpioneersolutions.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/greenpioneersolutions/buildreq/issues"
+    "url": "https://github.com/greenpioneersolutions/express-query-parameters/issues"
   },
-  "homepage": "https://github.com/greenpioneersolutions/buildreq",
+  "homepage": "https://github.com/greenpioneersolutions/express-query-parameters",
   "dependencies": {
     "auto-parse": "^1.0.0",
-    "chalk": "^1.1.1",
     "lodash": "^4.5.1",
-    "run-auto": "^2.0.0"
+    "run-auto": "^2.0.0",
+    "set-or-get": "^1.2.4"
   },
   "devDependencies": {
     "chai": "^3.4.1",
