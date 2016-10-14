@@ -1,6 +1,6 @@
 # Express Query Parameters
 
-![npm][npm-image]][npm-url]
+![npm][npm-image][npm-url]
 [![downloads][downloads-image]][downloads-url]
 [![dependencies](https://david-dm.org/greenpioneersolutions/express-query-parameters.svg)](https://david-dm.org/greenpioneersolutions/express-query-parameters)
 [![npm-issues](https://img.shields.io/github/issues/greenpioneersolutions/express-query-parameters.svg)](https://github.com/greenpioneersolutions/express-query-parameters/issues)
