@@ -1,5 +1,17 @@
-
 # Express Query Parameters
+
+[![npm][npm-image]][npm-url]
+[![downloads][downloads-image]][downloads-url]
+[![dependencies](https://david-dm.org/greenpioneersolutions/express-query-parameters.svg)](https://david-dm.org/greenpioneersolutions/express-query-parameters)
+[![npm-issues](https://img.shields.io/github/issues/greenpioneersolutions/express-query-parameters.svg)](https://github.com/greenpioneersolutions/express-query-parameters/issues)
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
+[![Build Status](https://travis-ci.org/greenpioneersolutions/express-query-parameters.svg?branch=master)](https://travis-ci.org/greenpioneersolutions/express-query-parameters)
+[![js-standard-style](https://nodei.co/npm/express-query-parameters.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/express-query-parameters.png?downloads=true&downloadRank=true&stars=true)
+
+[npm-image]: https://img.shields.io/npm/v/express-query-parameters.svg?style=flat
+[npm-url]: https://npmjs.org/package/express-query-parameters
+[downloads-image]: https://img.shields.io/npm/dt/express-query-parameters.svg?style=flat
+[downloads-url]: https://npmjs.org/package/express-query-parameters
 
 ## NOT READY FOR USE YET
 
@@ -109,7 +121,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 Created by ![Green Pioneer](http://greenpioneersolutions.com/img/icons/apple-icon-180x180.png)
 
-#### This is [on GitHub](https://github.com/greenpioneersolutions/auto-parse)
+#### This is [on GitHub](https://github.com/greenpioneersolutions/express-query-parameters)
 #### Find us [on GitHub](https://github.com/greenpioneersolutions)
 #### Find us [on Twitter](https://twitter.com/greenpioneerdev)
 #### Find us [on Facebook](https://www.facebook.com/Green-Pioneer-Solutions-1023752974341910)
