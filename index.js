@@ -2,7 +2,6 @@
 
 var _ = require('lodash')
 var autoParse = require('auto-parse')
-// var setOrGet = require('set-or-get')
 var util = require('./lib/util')
 var fs = require('fs')
 var Path = require('path')
@@ -132,7 +131,7 @@ Build.prototype.parse = function (parse, cb) {
 
 Build.prototype.middleware = function () {
   var self = this
-  return function (res, req, next) {
+  return function (req, res, next) {
     req.queryParameters = self.parse(req.query)
     next()
   }
