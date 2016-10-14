@@ -1,4 +1,14 @@
-var build = require('../index')({settings: {schema: ['name', 'title', 'content', 'roles'], mongoose: true}})
+var build = require('..')({
+  settings: {
+    schema: ['name', 'title', 'content', 'roles'],
+    adapter: 'mongoose'
+  // adapter: <object|string:supported adapter>
+  //             ^
+  //             |
+  //             object|string:supported adapter
+  }
+})
+
 var assert = require('chai').assert
 var _ = require('lodash')
 describe('Express Query Parameters', function () {
@@ -6,8 +16,7 @@ describe('Express Query Parameters', function () {
     it('Config', function () {
       var config = build.config()
       var defaults = _.cloneDeep(config.query)
-      if (config.settings.mongoose) _.merge(defaults, config.mongoose)
-      if (config.settings.sql) _.merge(defaults, config.sql)
+      _.merge(defaults, build.adapter.options)
       assert.deepEqual(build.parse(), defaults)
     })
     it('Filter', function () {
