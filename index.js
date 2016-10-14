@@ -3,7 +3,6 @@
 var _ = require('lodash')
 var autoParse = require('auto-parse')
 // var setOrGet = require('set-or-get')
-var auto = require('run-auto')
 var util = require('./lib/util')
 var fs = require('fs')
 var Path = require('path')
@@ -131,30 +130,13 @@ Build.prototype.parse = function (parse, cb) {
   }
 }
 
-Build.prototype.query = function (params) {
-  var options = this.options
+Build.prototype.middleware = function () {
   var self = this
-  if (params) options = _.merge(options, params)
-
   return function (res, req, next) {
-    if (_.isEmpty(req.query)) {
-      req.queryParameters = options
-      return next()
-    }
-
-    var tasks = self.tasks(req.query)
-
-    _.merge(tasks, self.adapter(req.query))
-
-    auto(
-      tasks
-      , function (err, result) {
-        if (err) console.log(err)
-        req.queryParameters = _.merge(options, result)
-        return next()
-      })
-  } // END OF RETURN
-} // END OF QUERY
+    req.queryParameters = self.parse(req.query)
+    next()
+  }
+}
 
 function build (options) {
   if (options === undefined || (typeof options === 'object' && options !== null)) {
