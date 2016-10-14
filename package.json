@@ -1,7 +1,7 @@
 {
   "name": "express-query-parameters",
-  "version": "0.1.0",
-  "description": "parse general queries to your express routes. We are adding extra support for sql & mongoose.",
+  "version": "1.0.0",
+  "description": "parse general queries to your express routes. we support mongoose , sql & custom adatapers for parsing routes",
   "main": "index.js",
   "scripts": {
     "test": "npm run mocha && npm run standard",
@@ -45,6 +45,11 @@
       "name": "greenpioneersolutions",
       "email": "green@greenpioneersolutions.com",
       "web": "https://github.com/greenpioneersolutions"
+    },
+    {
+      "name": "Ionică Bizău",
+      "email": "bizauionica@gmail.com",
+      "web": "http://ionicabizau.net"
     }
   ],
   "maintainers": [
@@ -60,16 +65,15 @@
   },
   "homepage": "https://github.com/greenpioneersolutions/express-query-parameters",
   "dependencies": {
-    "auto-parse": "^1.0.0",
-    "lodash": "^4.5.1",
-    "run-auto": "^2.0.0",
-    "set-or-get": "^1.2.4"
+    "auto-parse": "^1.2.0",
+    "lodash": "^4.5.1"
   },
   "devDependencies": {
-    "chai": "^3.4.1",
+    "chai": "^3.5.0",
+    "express": "^4.14.0",
     "mocha": "^2.3.4",
     "standard": "^5.3.1",
-    "supertest": "^1.1.0"
+    "supertest": "^1.2.0"
   },
   "engines": {
     "node": ">= 0.10.0"

@@ -2,8 +2,16 @@
 
 var _ = require('lodash')
 var autoParse = require('auto-parse')
-// var setOrGet = require('set-or-get')
-var auto = require('run-auto')
+var util = require('./lib/util')
+var fs = require('fs')
+var Path = require('path')
+
+var DEFAULT_OPTIONS = require('./lib/options.js')
+var PATHadapterS = __dirname + '/lib/adapters'
+
+var adapterNames = fs.readdirSync(PATHadapterS).map(function (c) {
+  return c.slice(0, -3)
+})
 
 function autoSync (tasks, cb) {
   var result = {}
@@ -27,12 +35,22 @@ function autoSync (tasks, cb) {
 
 function Build (options) {
   var self = this
-  self.options = _.merge(require('./lib/options.js'), options)
+
+  self.options = _.merge(_.cloneDeep(DEFAULT_OPTIONS), options)
+  self.adapter = null
+
+  // Handle the adapters
+  if (self.options.settings.adapter) {
+    self.adapter = self.getAdapter(self.options.settings.adapter)
+  }
+
   self.schema = self.options.settings.schema ? _.uniq(self.options.settings.schema) : []
+
   self.schemaSort = []
   _.forEach(self.schema, function (key) {
     self.schemaSort.push(key, '-' + key)
   })
+
   self.tasks = function (query) {
     return {
       filter: function (cb) {
@@ -50,52 +68,59 @@ function Build (options) {
         cb(null, query.skip ? autoParse(query.skip) : self.options.query.skip)
       },
       sort: function (cb) {
-        cb(null, query.sort ? sortCheck(query.sort) : self.options.query.sort)
+        cb(null, query.sort ? util.sortCheck(query.sort) : self.options.query.sort)
       },
       limit: function (cb) {
-        cb(null, query.limit ? limitCheck(query.limit, self.options.query.limit) : self.options.query.limit)
+        cb(null, query.limit ? util.limitCheck(query.limit, self.options.query.limit) : self.options.query.limit)
       },
       select: function (cb) {
-        cb(null, query.select ? selectCheck(query.select, self.schema) : self.options.query.select)
+        cb(null, query.select ? util.selectCheck(query.select, self.schema) : self.options.query.select)
       }
     }
   }
-  self.mongoose = function (query) {
-    return {
-      lean: function (cb) {
-        cb(null, query.lean ? autoParse(query.lean) : self.options.query.lean)
-      }
+}
+
+Build.prototype.getAdapter = function (name) {
+  if (typeof name === 'string') {
+    if (_.includes(adapterNames, name)) {
+      return require(Path.join(PATHadapterS, name))
     }
+    throw new Error('Adapter "' + name + '" does not exist. Provide an object to use a custom adapter.')
   }
-  self.sql = function (query) {
-    return {
-      sql: function (cb) {
-        cb(null, null)
-      }
-    }
-  }
+  return name
 }
 
 Build.prototype.config = function (data) {
   var self = this
-  self.options = _.merge(self.options, data)
+  if (data) self.options = _.merge(self.options, data)
+  return self.options
 }
+
 Build.prototype.parse = function (parse, cb) {
   var options = this.options
+  var defaults = _.cloneDeep(this.options.query)
+
+  _.merge(defaults, this.adapter.options)
+
   var self = this
   if (_.isEmpty(parse)) {
-    if (cb) return cb(self.options.query)
-    return self.options.query
+    if (cb) return cb(defaults)
+    return defaults
   }
+  parse = autoParse(parse)
 
   var tasks = self.tasks(parse)
-  if (this.options.settings.mongoose) _.merge(tasks, self.mongoose(parse))
-  if (this.options.settings.sql) _.merge(tasks, self.sql(parse))
+
+  _.merge(tasks, self.adapter(parse))
+
   var response = autoSync(
     tasks
     , function (err, result) {
       if (err) console.log(err)
-      return _.merge(options, result)
+      if (typeof self.adapter.afterParse === 'function') {
+        self.adapter.afterParse.call(self, result, options)
+      }
+      return _.merge(defaults, result)
     })
   if (cb) {
     return cb(response)
@@ -103,104 +128,14 @@ Build.prototype.parse = function (parse, cb) {
     return response
   }
 }
-Build.prototype.query = function (params) {
-  var options = this.options
+
+Build.prototype.middleware = function () {
   var self = this
-  if (params) options = _.merge(options, params)
-
-  return function (res, req, next) {
-    if (_.isEmpty(req.query)) {
-      req.queryParameters = options
-      return next()
-    }
-
-    var tasks = self.tasks(req.query)
-    if (this.options.settings.mongoose) _.merge(tasks, self.mongoose(req.query))
-    if (this.options.settings.sql) _.merge(tasks, self.sql(req.query))
-    auto(
-      tasks
-      , function (err, result) {
-        if (err) console.log(err)
-        req.queryParameters = _.merge(options, result)
-        return next()
-      })
-  } // END OF RETURN
-} // END OF QUERY
-
-function limitCheck (number, limit) {
-  number = number << 0
-  if (!number || number > limit || number === 0) {
-    number = limit
+  return function (req, res, next) {
+    req.queryParameters = self.parse(req.query)
+    next()
   }
-  return number
 }
-function sortCheck (sort) {
-  // V Year  ^ Title        ^ ...
-  //   1995    Bob           2
-  //   1995    Bob           1
-  //   1995    Alice
-  //   1995    AAA
-  //
-  //   1993    Carol
-  //   1993    Bob
-  //
-  //   1992    Dave
-  //
-  // sort=year&sort=-title
-  //
-  // sort: ["year", "-title"]
-  // .sort([
-  //  ["year", 1],
-  //  ["title", -1]
-  // ])
-  if (_.isArray(sort)) {
-    return _.map(sort, function (current) {
-      var direction = 1
-      if (_.startsWith(current, '-')) {
-        direction = -1
-        current = current.slice(1)
-      }
-      return [current, direction]
-    })
-  }
-  return sort
-}
-
-function selectCheck (select, schema) {
-  var selected = {}
-  select = _.isArray(select) ? select : select.split(' ')
-
-  _.forEach(select, function (current) {
-    if (!_.includes(schema, current)) {
-      return
-    }
-
-    var enabled = 1
-    if (_.startsWith(current, '-')) {
-      enabled = 0
-      current = current.slice(1)
-    }
-    selected[current] = enabled
-  })
-
-  return selected
-}
-
-// function errorHandler (errValue, field, value, queryParameters, defaults) { // ERRORHANDLER
-//   setOrGet(queryParameters.error, field, []).push({
-//     message: defaults.errorMessage,
-//     value: errValue
-//   })
-//   return value
-// }
-
-// function warningHandler (warnValue, field, value, queryParameters, defaults) { // warningHandler
-//   setOrGet(queryParameters.warning, field, []).push({
-//     message: defaults.errorMessage,
-//     value: errValue
-//   })
-//   return value
-// }
 
 function build (options) {
   if (options === undefined || (typeof options === 'object' && options !== null)) {
