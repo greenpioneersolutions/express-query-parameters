@@ -92,7 +92,14 @@ Build.prototype.getAdapter = function (name) {
 
 Build.prototype.config = function (data) {
   var self = this
-  if (data) self.options = _.merge(self.options, data)
+  if (data) {
+    self.options = _.merge(self.options, data)
+    self.schema = self.options.settings.schema ? _.uniq(self.options.settings.schema) : []
+    self.schemaSort = []
+    _.forEach(self.schema, function (key) {
+      self.schemaSort.push(key, '-' + key)
+    })
+  }
   return self.options
 }
 
