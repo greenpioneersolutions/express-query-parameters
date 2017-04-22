@@ -15,7 +15,7 @@
 
 
 ## What is Express Query Parameters
-This package is used to parse general queries and any other apdapter you want or create to add to your express routes. By using this package as middleware `app.user(queryParameters.middleware())` you will be able to have all parsed parameters waiting for you at `req.queryParameters` to do and search as you please.
+This package is used to parse general queries and any other apdapter you want or create to add to your express routes. By using this package as middleware `app.use(queryParameters.middleware())` you will be able to have all parsed parameters waiting for you at `req.queryParameters` to do and search as you please.
 
 
 ## Usage
