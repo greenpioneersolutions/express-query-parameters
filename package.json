@@ -1,11 +1,11 @@
 {
   "name": "express-query-parameters",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "parse general queries to your express routes. we support mongoose , sql & custom adatapers for parsing routes",
   "main": "index.js",
   "scripts": {
     "test": "npm run mocha && npm run standard",
-    "mocha": "node node_modules/.bin/mocha test/mocha.test.js",
+    "mocha": "node node_modules/.bin/mocha test/mocha.test.js --exit",
     "standard": "node_modules/.bin/standard"
   },
   "standard": {

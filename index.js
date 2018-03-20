@@ -7,7 +7,7 @@ var fs = require('fs')
 var Path = require('path')
 
 var DEFAULT_OPTIONS = require('./lib/options.js')
-var PATHadapterS = __dirname + '/lib/adapters'
+var PATHadapterS = Path.join(__dirname, '/lib/adapters')
 
 var adapterNames = fs.readdirSync(PATHadapterS).map(function (c) {
   return c.slice(0, -3)
