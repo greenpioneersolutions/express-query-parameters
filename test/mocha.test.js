@@ -24,8 +24,47 @@ describe('Express Query Parameters', function () {
     it('Config', function () {
       var config = queryParameters.config()
       var defaults = _.cloneDeep(config.query)
+
       _.merge(defaults, queryParameters.adapter.options)
       assert.deepEqual(queryParameters.parse(), defaults)
+    })
+    it('Config - deepPopulate', function () {
+      var config = queryParameters.config({
+        query: {
+          deepPopulate: 'users.name'
+        }
+      })
+
+      var defaults = _.cloneDeep(config.query)
+      assert.deepEqual(defaults, {
+        sort: '',
+        filter: {},
+        limit: 20,
+        skip: 0,
+        select: '',
+        deepPopulate: 'users.name',
+        populateId: '',
+        populateItems: '',
+        limitToPopulateId: '',
+        limitToPopulateItems: '',
+        where: '',
+        gt: false,
+        gte: false,
+        lte: false,
+        lt: false,
+        in: false,
+        ne: false,
+        nin: false,
+        regex: false,
+        options: false,
+        size: false,
+        all: false,
+        equals: false,
+        find: false,
+        or: false,
+        nor: false,
+        and: false
+      })
     })
     it('Filter', function () {
       assert.deepEqual(queryParameters.parse({name: 'jason'}).filter, {
